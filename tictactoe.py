@@ -1,11 +1,11 @@
 import pygame, sys
 from pygame.locals import QUIT, MOUSEBUTTONUP
 
-from lib import Board, FPS
+from lib import Board
 
 
 pygame.init()
-FPSCLOCK = pygame.time.Clock()
+clock = pygame.time.Clock()
 board = Board(4, 150, 50, 10)
 
 while True:
@@ -21,4 +21,4 @@ while True:
                 board.check_for_winner()
 
     pygame.display.update()
-    FPSCLOCK.tick(FPS)
+    clock.tick(30)
