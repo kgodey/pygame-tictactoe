@@ -86,24 +86,17 @@ class Board(object):
     
     def calculate_winners(self):
         self.winning_combinations = []
-        box_combinations = list(itertools.combinations([i for i in xrange(0, len(self.boxes))], self.grid_size))
-        for combination in box_combinations:            
-            diffs = []
-            for i in xrange(0, self.grid_size - 1):
-                diff = combination[i + 1] - combination[i]
-                diffs.append(diff)
-            if all(i == diff for i in diffs):
-                # Vertical rows
-                if diff == 1 and combination[0] % self.grid_size == 0:
-                    self.winning_combinations.append(combination)
-                # Horizontal rows
-                if diff == self.grid_size:
-                    self.winning_combinations.append(combination)
-                # Diagonal rows
-                if diff == self.grid_size + 1 and combination[0] == 0:
-                    self.winning_combinations.append(combination)
-                if diff == self.grid_size - 1 and combination[0] == self.grid_size - 1:
-                    self.winning_combinations.append(combination)
+        indices = [x for x in xrange(0, self.grid_size * self.grid_size)]
+        
+        # Vertical combinations
+        self.winning_combinations += ([tuple(indices[i:i+self.grid_size]) for i in xrange(0, len(indices), self.grid_size)])
+        
+        # Horizontal combinations
+        self.winning_combinations += [tuple([indices[x] for x in xrange(y, len(indices), self.grid_size)]) for y in xrange(0, self.grid_size)]
+        
+        # Diagonal combinations
+        self.winning_combinations.append(tuple(x for x in xrange(0, len(indices), self.grid_size + 1)))
+        self.winning_combinations.append(tuple(x for x in xrange(self.grid_size - 1, len(indices), self.grid_size - 1)))
     
     def check_for_winner(self):
         winner = 0
