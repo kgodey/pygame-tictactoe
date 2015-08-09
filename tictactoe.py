@@ -6,7 +6,7 @@ from lib import Board
 
 pygame.init()
 clock = pygame.time.Clock()
-board = Board(4, 150, 50, 10)
+board = Board(grid_size=4, box_size=150, border=50, line_width=10)
 
 while True:
     for event in pygame.event.get():
