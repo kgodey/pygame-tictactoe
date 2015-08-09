@@ -71,6 +71,12 @@ class Board(object):
                 return box
         return None
     
+    def process_click(self, x, y):
+        box = self.get_box_at_pixel(x, y)
+        if box is not None and not self.game_over:
+            self.play_turn(box)
+            self.check_game_over()
+    
     def play_turn(self, box):
         if box.state != 0:
             return
@@ -108,15 +114,25 @@ class Board(object):
                 winner = 1
             if all(x == 2 for x in states):
                 winner = 2
+        return winner
+    
+    def check_game_over(self):
+        winner = self.check_for_winner()
         if winner:
             self.game_over = True
-            self.display_winner(winner)
+        elif all(box.state in [1, 2] for box in self.boxes):
+            self.game_over = True
+        if self.game_over:
+            self.display_game_over(winner)
     
-    def display_winner(self, winner):
+    def display_game_over(self, winner):
         surface_size = self.surface.get_height()
-        winner_text = 'Player %s won!' % winner
         font = pygame.font.Font('freesansbold.ttf', surface_size / 8)
-        text = font.render(winner_text, True, BLACK)
+        if winner:
+            text = 'Player %s won!' % winner
+        else:
+            text = 'Draw!'
+        text = font.render(text, True, BLACK, WHITE)
         rect = text.get_rect()
         rect.center = (surface_size / 2, surface_size / 2)
         self.surface.blit(text, rect)

@@ -6,7 +6,7 @@ from lib import Board
 
 pygame.init()
 clock = pygame.time.Clock()
-board = Board(grid_size=4, box_size=150, border=50, line_width=10)
+board = Board(grid_size=3, box_size=100, border=50, line_width=10)
 
 while True:
     for event in pygame.event.get():
@@ -15,10 +15,7 @@ while True:
             sys.exit()
         elif event.type == MOUSEBUTTONUP:
             x, y = event.pos
-            box = board.get_box_at_pixel(x, y)
-            if box is not None:
-                board.play_turn(box)
-                board.check_for_winner()
+            board.process_click(x, y)
 
     pygame.display.update()
     clock.tick(30)
